@@ -67,7 +67,7 @@ form > input[type="submit"]{
 }
 
 /* Messages */
-.messages{
+.message{
     border: none;
     border-radius: 10px;
     font-size: 20px;

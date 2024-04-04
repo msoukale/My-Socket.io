@@ -11,10 +11,29 @@ while(!pseudo){
 socket.emit('pseudo', pseudo);
 document.title = pseudo + ' - ' + document.title
 
+document.getElementById('chatForm').addEventListener('submit', (e) => {
+
+    e.preventDefault();
+
+    const textInput = document.getElementById('msgInput').value;
+    
+    document.getElementById('msgInput').value = '';
+    if(textInput.length > 0){
+        socket.emit('newMessage', textInput);
+        createElementFunction('newMessageMe', textInput);
+    }else{
+        return false;
+    }
+})
+
 // Evenements : 
 
 socket.on('newUser', (pseudo) => {
     createElementFunction('newUser', pseudo);
+})
+
+socket.on('newMessageAll', (content) => {
+    createElementFunction('newMessageAll', content);
 })
 
 socket.on('quitUser', (pseudo) => {
@@ -33,6 +52,18 @@ function createElementFunction(element, content) {
             newElement.textContent = content + ' a rejoint le bledroom';
             document.getElementById('msg').appendChild(newElement);
             break;
+
+        case 'newMessageMe':
+            newElement.classList.add(element,'message');
+            newElement.innerHTML = pseudo + ': ' + content;
+            document.getElementById('msg').appendChild(newElement);
+            break;   
+            
+        case 'newMessageAll':
+            newElement.classList.add(element,'message');
+            newElement.innerHTML = content.pseudo + ': ' + content.message;
+            document.getElementById('msg').appendChild(newElement);
+            break;       
         
         case 'quitUser':
             newElement.classList.add(element, 'message')

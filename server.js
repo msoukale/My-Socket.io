@@ -25,6 +25,11 @@ io.on('connection', (socket) => {
         socket.pseudo = pseudo; // stockage de pseudo pour avoir accès dans tout le code 
         socket.broadcast.emit('newUser', pseudo)
     })
+
+    socket.on('newMessage', (message) =>{
+        socket.broadcast.emit('newMessageAll', {message: message, pseudo: socket.pseudo});
+    });
+
     socket.on('disconnect', () => {
         socket.broadcast.emit('quitUser', socket.pseudo);
     })
