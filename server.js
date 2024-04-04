@@ -5,10 +5,6 @@ var mongoose = require('mongoose');
 
 const ObjectId = mongoose.Types.ObjectId;
 
-
-
-
-// Utiliser l'API de promesse globale de Node.js
 mongoose.Promise = global.Promise;
 
 // Connexion à la base de données avec async/await
@@ -20,10 +16,8 @@ async function connectToDatabase() {
         console.error('Erreur de connexion à la base de données :', error);
     }
 }
-
-// Appeler la fonction pour se connecter à la base de données
+// Appele de la fonction pour se connecter à la base de données
 connectToDatabase();
-
 
 app.use(express.static(__dirname + '/public'));
 
