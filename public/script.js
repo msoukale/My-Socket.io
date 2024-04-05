@@ -16,7 +16,7 @@ document.getElementById('chatForm').addEventListener('submit', (e) => {
     e.preventDefault();
 
     const textInput = document.getElementById('msgInput').value;
-    
+
     document.getElementById('msgInput').value = '';
     if(textInput.length > 0){
         socket.emit('newMessage', textInput);
@@ -34,6 +34,17 @@ socket.on('newUser', (pseudo) => {
 
 socket.on('newMessageAll', (content) => {
     createElementFunction('newMessageAll', content);
+})
+
+socket.on('oldMessages', (messages) => {
+    messages.forEach(message => {
+        if(message.sender === pseudo) {
+            createElementFunction('oldMessageMe', message);
+        } else {
+            createElementFunction('oldMessages', message);
+        }
+        
+    });
 })
 
 socket.on('quitUser', (pseudo) => {
@@ -63,7 +74,21 @@ function createElementFunction(element, content) {
             newElement.classList.add(element,'message');
             newElement.innerHTML = content.pseudo + ': ' + content.message;
             document.getElementById('msg').appendChild(newElement);
-            break;       
+            break;
+        
+        case 'oldMessages':
+            newElement.classList.add(element,'message');
+            newElement.innerHTML = content.sender + ': ' + content.content;
+            document.getElementById('msg').appendChild(newElement);
+            break;
+
+        case 'oldMessagesMe':
+            newElement.classList.add('newMessageMe', 'message');
+            newElement.innerHTML = content.sender + ': ' + content.content;
+            document.getElementById('msg').appendChild(newElement);
+            break;  
+
+
         
         case 'quitUser':
             newElement.classList.add(element, 'message')

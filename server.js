@@ -67,14 +67,42 @@ io.on('connection', (socket) => {
                 socket.pseudo = pseudo;  // stockage de pseudo pour avoir accès dans tout le code 
                 socket.broadcast.emit('newUser', pseudo);  // lorsque le user est connecté on stocke son pseudo et on emmet aux autres 
             }
-    }
+
+            const messages = await chat.find().exec();
+            socket.emit('oldMessages', messages);
+
+            // chat.find((err, messages) => {
+            //     socket.emit('oldMessages', messages);
+            // })
+
+
+            // socket.on('getMessages', async () => {
+            //     try {
+            //         // Utilisation de la méthode find() avec les promesses
+            //         const messages = await chat.find().exec();
+
+            //         // Émettre les messages à l'utilisateur qui les demande
+            //         socket.emit('oldMessages', messages);
+            //     } catch (error) {
+            //         console.error('Erreur lors de la récupération des messages :', error);
+            //     }
+            // });
+
+        }
     findOrCreateUser(pseudo);
-        
     });
 
-    socket.on('newMessage', (message) =>{
-        socket.broadcast.emit('newMessageAll', {message: message, pseudo: socket.pseudo});
+
+
+    socket.on('newMessage', async (message) => {
+            const newChat = new chat({
+                content: message,
+                sender: socket.pseudo
+            });
+            await newChat.save();
+            socket.broadcast.emit('newMessageAll', { message: message, pseudo: socket.pseudo });
     });
+
 
     socket.on('disconnect', () => {
         socket.broadcast.emit('quitUser', socket.pseudo);
