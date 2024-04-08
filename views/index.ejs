@@ -9,21 +9,35 @@
 <body>
     <div class="app">
         <h1 class="title">BLEDROOM</h1>
-        <div class="container">
-            <div class="channelList">
-                <h1>Listes des channels</h1>
-            </div>
-            <div class="msg" id="msg">
+            <div class="container">
+                <div class="channelList">
+                    <h1>Listes des channels</h1>
+                    <ul id="roomList">
+                        <% channels.forEach(channel => { %>
+                            <li class="elementList" id="<%= channel.name %>" onclick="_joinRoom('<%= channel.name %>')">
+                                <%= channel.name %>
+                            </li>
+                        <% }); %> 
+                        <li class="elementList" id="createNewRoom" onclick="_createRoom()"> créer une nouvelle Room</li>
+                    </ul>
+                </div>
+           
+                <div class="msg" id="msg">
 
+                </div>
             </div>
-        </div>
-        <div id="isWritting"></div>
-        <form method="post" id="chatForm">
-            <input type="text" id="msgInput" autofocus>
-            <input type="submit" id="send" value="Envoyer">
-        </form>
+            <div id="isWritting"></div>
+            <form method="post" id="chatForm">
+                <input type="text" id="msgInput" autofocus>
+                <select name="receiver" id="receiverInput">
+                        <option value="all">A tous</option>
+                        <% users.forEach(user => { %> 
+                            <option value="<%= user.pseudo %>"><%= user.pseudo %></option>
+                        <% }); %>
+                </select>
+                <input type="submit" id="send" value="Envoyer">
+            </form>
     </div>
-
     <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>
 </body>

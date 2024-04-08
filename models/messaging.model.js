@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-var chatSchema = new mongoose.Schema({
+var messagingSchema = new mongoose.Schema({
     id_room: {
         type: 'string'
     },
@@ -9,4 +9,4 @@ var chatSchema = new mongoose.Schema({
     content: 'string'
 });
 
-mongoose.model('chat', chatSchema);
+mongoose.model('messaging', messagingSchema);
